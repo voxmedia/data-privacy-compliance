@@ -4,6 +4,7 @@
   "description": "Vox Media's library for implementing data privacy frameworks",
   "main": "index.js",
   "license": "Apache",
+  "url": "https://github.com/voxmedia/data-privacy-compliance",
   "private": false,
   "devDependencies": {
     "jest": "^26.0.1"
