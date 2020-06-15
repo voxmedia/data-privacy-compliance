@@ -1,4 +1,17 @@
+const Capabilities = require('./capabilities');
+
 class FrameworkBase {
+  constructor() {
+    this.checks = new Map();
+    this.setup();
+  }
+
+  setup() {}
+
+  for(capabilitySymbol, checkFunction) {
+    this.checks.set(capabilitySymbol, checkFunction);
+  }
+
   canPersonalizeContent() {
     return true;
   }
@@ -6,6 +19,21 @@ class FrameworkBase {
     return true;
   }
   canSendThirdPartyMetrics() {
+    return true;
+  }
+  canPersonalizeTargeting() {
+    return true;
+  }
+  canUsePersonalInformationForTargeting() {
+    return true;
+  }
+
+  can(capabilitySymbol) {
+    console.log('checking if i can', capabilitySymbol);
+    const checkFunction = this.checks.get(capabilitySymbol);
+    if (checkFunction) {
+      return checkFunction.call(this);
+    }
     return true;
   }
 }
@@ -17,7 +45,14 @@ class GDPRFramework extends FrameworkBase {
 }
 
 class CCPAFramework extends FrameworkBase {
-  canPerformPersonalizedAdvertiserTargeting() {
+  setup() {
+    this.for(Capabilities.usePersonalInformationForTargeting, () => {
+      console.log('checking ccpa usePersonalInformationForTargeting');
+      return true;
+    });
+  }
+
+  canUsePersonalInformationForTargeting() {
     return true;
   }
 }
@@ -29,24 +64,27 @@ const areAllTrue = (collection) => {
 class PrivacyCompliance {
   constructor() {
     this.frameworks = [];
-    this.frameworks.push(new CCPAFramework());
-    this.frameworks.push(new GDPRFramework());
+    this.addFramework(new CCPAFramework());
+    this.addFramework(new GDPRFramework());
   }
 
-  canPerform(functionalities = []) {
+  addFramework(frameworkInstance) {
+    this.frameworks.push(frameworkInstance);
+  }
+
+  canUsePersonalInformationForTargeting() {
     return areAllTrue(
-      this.frameworks.map((f) => f.canPerform(functionalities))
+      this.frameworks.map((f) => f.canUsePersonalInformationForTargeting())
     );
   }
 
-  canPerformPersonalizedAdvertiserTargeting() {
-    return areAllTrue(
-      this.frameworks.map((f) => f.canPerformPersonalizedAdvertiserTargeting())
-    );
+  can(capabilitySymbol) {
+    return areAllTrue(this.frameworks.map((f) => f.can(capabilitySymbol)));
   }
+
   canPersonalizeContent() {}
   canSendMetrics() {}
   canSendThirdPartyMetrics() {}
 }
 
-export default new PrivacyCompliance();
+module.exports = new PrivacyCompliance();
