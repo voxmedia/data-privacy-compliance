@@ -16,14 +16,28 @@ module.exports = class CCPAFromUSPrivacyString extends FrameworkBase {
       Capabilities.usePersonalInformationForTargeting,
       this.consentStringSupportsPersonalDataSale
     );
+
+    this.checkCapability(
+      Capabilities.beenNotifiedOfCcpaRights,
+      this.consentStringAcknowledgesUserHasBeenNotifiedOfRights
+    );
   }
 
   consentStringSupportsPersonalDataSale() {
     return (
-      this.uSprivacyString.length === 4 &&
-      this.uSprivacyString[0] === '1' &&
-      this.uSprivacyString[1] === 'Y' &&
+      this.supportedUsPrivacyStringVersion() &&
+      this.consentStringAcknowledgesUserHasBeenNotifiedOfRights() &&
       this.uSprivacyString[2] !== 'Y'
     );
+  }
+
+  consentStringAcknowledgesUserHasBeenNotifiedOfRights() {
+    return (
+      this.supportedUsPrivacyStringVersion() && this.uSprivacyString[1] === 'Y'
+    );
+  }
+
+  supportedUsPrivacyStringVersion() {
+    return this.uSprivacyString.length === 4 && this.uSprivacyString[0] === '1';
   }
 };

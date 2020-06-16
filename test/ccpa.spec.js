@@ -2,24 +2,6 @@ const PrivacyCompliance = require('../src/privacy_compliance');
 const Capabilities = require('../src/capabilities');
 const CCPAFromUSPrivacyString = require('../src/frameworks/ccpa_from_us_privacy_string');
 
-describe('basic "can" support', () => {
-  afterEach(() => {
-    PrivacyCompliance.reset();
-  });
-
-  it('should be able to reference symbols', () => {
-    expect(
-      PrivacyCompliance.can(Capabilities.usePersonalInformationForTargeting)
-    ).toBeTruthy();
-  });
-
-  it("should be able to reference symbols that don't have an implimentation", () => {
-    expect(
-      PrivacyCompliance.can(Capabilities.canSendThirdPartyMetrics)
-    ).toBeTruthy();
-  });
-});
-
 describe('Bidirectional CCPA support', () => {
   afterEach(() => {
     PrivacyCompliance.reset();
@@ -33,6 +15,16 @@ describe('Bidirectional CCPA support', () => {
 
       expect(
         PrivacyCompliance.can(Capabilities.usePersonalInformationForTargeting)
+      ).toBeFalsy();
+    });
+
+    it('should know if the user has been shown their rights', () => {
+      const ccpaFromPrivacyString = new CCPAFromUSPrivacyString();
+      ccpaFromPrivacyString.setPrivacyString('1N--');
+      PrivacyCompliance.addFramework(ccpaFromPrivacyString);
+
+      expect(
+        PrivacyCompliance.can(Capabilities.beenNotifiedOfCcpaRights)
       ).toBeFalsy();
     });
 

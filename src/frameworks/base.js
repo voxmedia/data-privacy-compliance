@@ -1,3 +1,5 @@
+const Capabilities = require('../capabilities');
+
 class FrameworkBase {
   constructor() {
     this.checks = new Map();
@@ -6,11 +8,15 @@ class FrameworkBase {
     }
   }
 
-  setup() {}
-
   isApplicable() {
     return true;
   }
+
+  supportedCapabilities() {
+    return Array.from(this.checks.keys());
+  }
+
+  setup() {}
 
   checkCapability(capabilitySymbol, checkFunction) {
     this.checks.set(capabilitySymbol, checkFunction);
@@ -21,7 +27,9 @@ class FrameworkBase {
     if (checkFunction) {
       return checkFunction.call(this);
     }
-    return true;
+    console.log('hidding default for', capabilitySymbol);
+    console.log(Capabilities.defaultsFalse.includes(capabilitySymbol));
+    return !Capabilities.defaultsFalse.includes(capabilitySymbol);
   }
 }
 
