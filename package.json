@@ -3,7 +3,7 @@
   "version": "1.0",
   "description": "Vox Media's library for implementing data privacy frameworks",
   "main": "index.js",
-  "license": "Apache",
+  "license": "Apache-2.0",
   "url": "https://github.com/voxmedia/data-privacy-compliance",
   "private": false,
   "devDependencies": {

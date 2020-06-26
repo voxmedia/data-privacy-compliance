@@ -1,35 +1,41 @@
-const Capabilities = require('../capabilities');
-
 class FrameworkBase {
-  constructor() {
-    this.checks = new Map();
-    if (this.isApplicable()) {
-      this.setup();
-    }
+  constructor() {}
+
+  get name() {
+    return this.constructor.name;
+  }
+
+  static isAutoLoaded() {
+    return true;
   }
 
   isApplicable() {
     return true;
   }
 
+  useConfig(someConfigs = {}) {}
+
   supportedCapabilities() {
-    return Array.from(this.checks.keys());
+    return [];
   }
 
-  setup() {}
+  canAnswerCapability(capability) {
+    return this.supportedCapabilities().includes(capability);
+  }
+}
 
-  checkCapability(capabilitySymbol, checkFunction) {
-    this.checks.set(capabilitySymbol, checkFunction);
+class GDPRFramework extends FrameworkBase {
+  constructor() {
+    super();
+
+    this.applies = false;
+  }
+  isApplicable() {
+    return this.applies;
   }
 
-  can(capabilitySymbol) {
-    const checkFunction = this.checks.get(capabilitySymbol);
-    if (checkFunction) {
-      return checkFunction.call(this);
-    }
-    console.log('hidding default for', capabilitySymbol);
-    console.log(Capabilities.defaultsFalse.includes(capabilitySymbol));
-    return !Capabilities.defaultsFalse.includes(capabilitySymbol);
+  useConfig({ gdprConsentData, gdprApplies }) {
+    this.applies = gdprApplies;
   }
 }
 
