@@ -16,6 +16,7 @@ class PrivacyCompliance {
   constructor() {
     this.frameworks = [];
     this.supportedCapabilities = new Set();
+    this.supportedGenerators = new Set();
   }
 
   useConfig(someConfigs) {
@@ -26,19 +27,33 @@ class PrivacyCompliance {
   reset() {
     this.frameworks = [];
     this.supportedCapabilities = new Set();
+    this.supportedGenerators = new Set();
   }
 
   addFramework(frameworkInstance) {
     this.frameworks.push(frameworkInstance);
     frameworkInstance.supportedCapabilities().forEach(c => this.supportedCapabilities.add(c));
+    frameworkInstance.supportedGenerators().forEach(c => this.supportedGenerators.add(c));
   }
 
   hasFrameworkLoadedToAnswerCapability(capability) {
     return this.supportedCapabilities.has(capability);
   }
 
+  hasFrameworkLoadedToGenerate(ability) {
+    return this.supportedGenerators.has(ability);
+  }
+
   applicableFrameworks() {
     return this.frameworks.filter(f => f.isApplicable());
+  }
+
+  get Generator() {
+    return new Proxy(this, {
+      get: (privacyComplianceInstance, property) => {
+        return privacyComplianceInstance.proxyToFrameworkGenerators(property);
+      },
+    });
   }
 
   /**
@@ -62,6 +77,33 @@ class PrivacyCompliance {
     }
   }
 
+  proxyToFrameworkGenerators(methodName) {
+    if (this.hasFrameworkLoadedToGenerate(methodName)) {
+      return (callback = () => {}) => {
+        try {
+          this.frameworks
+            .filter(f => f.isApplicable())
+            .filter(f => f.canGenerate(methodName))
+            // this feels a little weird, but by the time this is called, it will be defined
+            // from below this class
+            .map(f => f[methodName].call(f, callback, privacyComplianceSingleton));
+        } catch (e) {
+          console.error(`There was an error calling ${methodName} - ${e}`);
+        }
+      };
+    } else {
+      this.throwUnsupportedError(methodName);
+    }
+  }
+
+  throwUnsupportedError(method) {
+    throw new TypeError(
+      `Can not call '${method}'. It is not found in the loaded frameworks. Supported capabilities: ${Array.from(
+        this.supportedCapabilities
+      ).join(', ')}`
+    );
+  }
+
   /**
    * This uses a modern Proxy() object to support arbitrary missing methods
    * which allows the frameworks to declare their own capability methods without
@@ -70,19 +112,15 @@ class PrivacyCompliance {
 
   applyProxy() {
     return new Proxy(this, {
-      get: (object, property) => {
-        if (Reflect.has(object, property)) {
-          return Reflect.get(object, property);
-        } else if (object.hasFrameworkLoadedToAnswerCapability(property)) {
+      get: (privacyComplianceInstance, property) => {
+        if (Reflect.has(privacyComplianceInstance, property)) {
+          return Reflect.get(privacyComplianceInstance, property);
+        } else if (privacyComplianceInstance.hasFrameworkLoadedToAnswerCapability(property)) {
           return () => {
-            return object.proxyToFrameworks(property);
+            return privacyComplianceInstance.proxyToFrameworks(property);
           };
         } else {
-          throw new TypeError(
-            `Can not call ${property}(). It is not found in the loaded frameworks. Supported capabilities: ${Array.from(
-              object.supportedCapabilities
-            ).join(', ')}`
-          );
+          privacyComplianceInstance.throwUnsupportedError(property);
         }
       },
     });
@@ -97,6 +135,17 @@ class PrivacyCompliance {
  */
 const areAllTrue = collection => {
   return collection.filter(capability => !capability).length == 0;
+};
+
+const areAllTheSame = collection => {
+  return (
+    collection.reduce((accumulator, currentValue) => {
+      if (!accumulator.includes(currentValue)) {
+        accumulator.push(currentValue);
+      }
+      return accumulator;
+    }, []).length === 1
+  );
 };
 
 const privacyComplianceSingleton = new PrivacyCompliance().applyProxy();

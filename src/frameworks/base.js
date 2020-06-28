@@ -19,8 +19,16 @@ class FrameworkBase {
     return [];
   }
 
+  supportedGenerators() {
+    return [];
+  }
+
   canAnswerCapability(capability) {
     return this.supportedCapabilities().includes(capability);
+  }
+
+  canGenerate(ability) {
+    return this.supportedGenerators().includes(ability);
   }
 }
 
