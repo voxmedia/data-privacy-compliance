@@ -17,6 +17,10 @@ class CCPAFromUSPrivacyString extends FrameworkBase {
     }
   }
 
+  isApplicable() {
+    return !!this.usPrivacyString;
+  }
+
   supportedCapabilities() {
     return ['canUsePersonalInformationForTargeting', 'hasBeenNotifiedOfRights'];
   }
