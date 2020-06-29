@@ -6,11 +6,9 @@ const frameworks = require('./frameworks');
  * Responsible for managing frameworks and proxying requests to related
  * frameworks.
  *
- * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * Note:
- * This uses Proxy() to support introspection of method calls
- * to make it look like this class has a lot more functions than it really does
- * =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ * Note: This uses Proxy() to support introspection of method calls
+ * to make it look like this class has a lot more functions
+ * than it really does
  */
 class PrivacyCompliance {
   constructor() {
