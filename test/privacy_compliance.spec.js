@@ -1,5 +1,5 @@
 const PrivacyCompliance = require('../src/privacy_compliance');
-const FrameworkBase = require('../src/frameworks/base');
+const TestHelpers = require('./test_helpers');
 
 const makeFakeFramework = (methodName, result) => {
   let fakeFramework = {
@@ -122,7 +122,7 @@ describe('PrivacyCompliance', () => {
   describe('Support for Generators', () => {
     beforeEach(() => {
       PrivacyCompliance.reset();
-      PrivacyCompliance.addFramework(makeTemporaryGeneratorFramework('eatNachos'));
+      PrivacyCompliance.addFramework(TestHelpers.makeTemporaryGeneratorFrameworkInstance('eatNachos'));
     });
 
     it('will use callbacks to support generators', () => {
@@ -133,7 +133,7 @@ describe('PrivacyCompliance', () => {
     });
 
     it('will callback as many times as there are generator functions that support this generator', () => {
-      PrivacyCompliance.addFramework(makeTemporaryGeneratorFramework('eatNachos'));
+      PrivacyCompliance.addFramework(TestHelpers.makeTemporaryGeneratorFrameworkInstance('eatNachos'));
 
       const callback = jest.fn();
       PrivacyCompliance.Generator.eatNachos(callback);
@@ -142,7 +142,7 @@ describe('PrivacyCompliance', () => {
     });
 
     it('will skip frameworks that are not applicable', () => {
-      const secondNachoFramework = makeTemporaryGeneratorFramework('eatNachos');
+      const secondNachoFramework = TestHelpers.makeTemporaryGeneratorFrameworkInstance('eatNachos');
       // but mark this as not applicable
       secondNachoFramework.isApplicable = () => false;
 
