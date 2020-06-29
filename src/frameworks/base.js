@@ -24,19 +24,4 @@ class FrameworkBase {
   }
 }
 
-class GDPRFramework extends FrameworkBase {
-  constructor() {
-    super();
-
-    this.applies = false;
-  }
-  isApplicable() {
-    return this.applies;
-  }
-
-  useConfig({ gdprConsentData, gdprApplies }) {
-    this.applies = gdprApplies;
-  }
-}
-
 module.exports = FrameworkBase;
