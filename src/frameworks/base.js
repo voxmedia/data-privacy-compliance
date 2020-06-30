@@ -1,5 +1,7 @@
 class FrameworkBase {
-  constructor() {}
+  constructor() {
+    this.privacyComplianceInstance = null;
+  }
 
   get name() {
     return this.constructor.name;
@@ -21,6 +23,14 @@ class FrameworkBase {
 
   canAnswerCapability(capability) {
     return this.supportedCapabilities().includes(capability);
+  }
+
+  setPrivacyComplianceInstance(pc) {
+    this.privacyComplianceInstance = pc;
+  }
+
+  log(...args) {
+    this.privacyComplianceInstance && this.privacyComplianceInstance.log(`[${this.name}]`, ...args);
   }
 }
 
