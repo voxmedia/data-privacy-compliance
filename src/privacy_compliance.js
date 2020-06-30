@@ -64,6 +64,10 @@ class PrivacyCompliance {
         this.frameworks
           .filter(f => f.isApplicable())
           .filter(f => f.canAnswerCapability(methodName))
+          .map(f => {
+            this.log(f.name + ' answering: ' + methodName);
+            return f;
+          })
           .map(f => f[methodName].call(f))
       );
     } catch (e) {

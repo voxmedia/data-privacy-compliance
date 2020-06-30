@@ -30,7 +30,7 @@ class FrameworkBase {
   }
 
   log(...args) {
-    this.privacyComplianceInstance && this.privacyComplianceInstance.log(...args);
+    this.privacyComplianceInstance && this.privacyComplianceInstance.log(`[${this.name}]`, ...args);
   }
 }
 

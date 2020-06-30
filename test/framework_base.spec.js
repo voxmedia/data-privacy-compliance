@@ -11,13 +11,12 @@ describe('Basic Framework support', () => {
   it('should send logs back to the main privacy instance', () => {
     let logEntries = [];
     PrivacyCompliance.useLogger((...args) => {
-      logEntries.push(args.join(', '));
+      logEntries.push(args.join(' '));
     });
 
     let base = new FrameworkBase();
     PrivacyCompliance.addFramework(base);
     base.log('hello from a framework');
-
-    expect(logEntries.includes('hello from a framework')).toBeTruthy();
+    expect(logEntries.includes('[FrameworkBase] hello from a framework')).toBeTruthy();
   });
 });

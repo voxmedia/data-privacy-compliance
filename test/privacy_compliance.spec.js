@@ -7,6 +7,7 @@ const makeFakeFramework = (methodName, result) => {
     supportedCapabilities: () => [methodName],
     useConfig: () => {},
     setPrivacyComplianceInstance: () => {},
+    log: () => {},
     name: `FakeFramework - ${methodName}`,
   };
   fakeFramework[methodName] = () => result;
@@ -27,6 +28,7 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         setPrivacyComplianceInstance: () => {},
+        log: () => {},
         canFakeFeature,
       });
 
@@ -44,6 +46,7 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         setPrivacyComplianceInstance: () => {},
+        log: () => {},
         canFakeFeature,
       });
 
@@ -52,6 +55,7 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         setPrivacyComplianceInstance: () => {},
+        log: () => {},
         canFakeFeature: canFakeFeature2,
       });
 
@@ -145,6 +149,17 @@ describe('PrivacyCompliance', () => {
 
       expect(logEntries.length).toBe(1);
       expect(logEntries[0]).toBe('I respect your data, 12');
+    });
+
+    it('should have a log called on the instance when it is answering a capability request', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(' ')));
+
+      let fakeFramework = makeFakeFramework('canEatHotDog', true);
+
+      PrivacyCompliance.addFramework(fakeFramework);
+      PrivacyCompliance.canEatHotDog();
+      expect(logEntries.includes('FakeFramework - canEatHotDog answering: canEatHotDog')).toBeTruthy();
     });
   });
 });
