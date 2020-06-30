@@ -15,25 +15,63 @@ class PrivacyCompliance {
     this.frameworks = [];
     this.supportedCapabilities = new Set();
     this.supportedGenerators = new Set();
+    this.logEntries = [];
+    this.logger = (...args) => {
+      this.logEntries.push(args);
+    };
   }
 
+  /**
+   * useConfig is a convenient way to pass configuration values to all frameworks.
+   * When a useConfig is called, every loaded framework will have their own
+   * useConfig methods called.
+   *
+   * The ideal pattern is to use keys to type the configs, for example:
+   * PrivacyCompliance.useConfig({
+   *   usp: "1TFT"
+   * })
+   * Which could signal to any listening capabiltiy-frameworks to use the new
+   * US Privacy String
+   *
+   * @param {Object} someConfigs any config to share with all frameworks
+   */
   useConfig(someConfigs) {
     this.frameworks.forEach(f => f.useConfig(someConfigs));
   }
 
-  // For use with testing only
-  reset() {
-    this.frameworks = [];
-    this.supportedCapabilities = new Set();
-    this.supportedGenerators = new Set();
+  /**
+   * Allows this libraries internal logs to be accessible to including libraries.
+   * The default is to also insert any missed logs. Because this is setup as a singleton,
+   * it is easy to miss the initial setup logs, that happened, before a logger was setup.
+   *
+   * @param {Function} logFunction to be called everytime a new log entry is generated
+   * @param {Boolean} relogMissedEntries when true will relog missed entries from before the logger was wired up
+   */
+  useLogger(logFunction, relogMissedEntries = true) {
+    this.logger = logFunction;
+    if (relogMissedEntries) {
+      this.logEntries.forEach(entry => this.log(...entry));
+    }
   }
 
   addFramework(frameworkInstance) {
+    this.log('Adding new framework: ', frameworkInstance.name);
+    frameworkInstance.setPrivacyComplianceInstance(privacyComplianceSingleton);
     this.frameworks.push(frameworkInstance);
     frameworkInstance.supportedCapabilities().forEach(c => this.supportedCapabilities.add(c));
     frameworkInstance.supportedGenerators().forEach(c => this.supportedGenerators.add(c));
   }
 
+  /**
+   * Checks if a given Capability (as a string) can be answered by the loaded
+   * frameworks.
+   *
+   * Caution: not all frameworks will be applicable and able to
+   * answer this capability for all environments.
+   *
+   * @param {String} capability the method name of the capability
+   * @returns Boolean true if the capability can be answered
+   */
   hasFrameworkLoadedToAnswerCapability(capability) {
     return this.supportedCapabilities.has(capability);
   }
@@ -42,8 +80,15 @@ class PrivacyCompliance {
     return this.supportedGenerators.has(ability);
   }
 
+  /**
+   * Returns a list of applicable frameworks for this environment.
+   */
   applicableFrameworks() {
     return this.frameworks.filter(f => f.isApplicable());
+  }
+
+  log(...args) {
+    this.logger(...args);
   }
 
   get Generator() {
@@ -52,6 +97,13 @@ class PrivacyCompliance {
         return privacyComplianceInstance.proxyToFrameworkGenerators(property);
       },
     });
+  }
+
+  // For use with testing only
+  reset() {
+    this.frameworks = [];
+    this.supportedCapabilities = new Set();
+    this.supportedGenerators = new Set();
   }
 
   /**
@@ -64,12 +116,15 @@ class PrivacyCompliance {
    */
   proxyToFrameworks(methodName) {
     try {
-      return areAllTrue(
-        this.frameworks
-          .filter(f => f.isApplicable())
-          .filter(f => f.canAnswerCapability(methodName))
-          .map(f => f[methodName].call(f))
-      );
+      return this.frameworks
+        .filter(f => f.isApplicable())
+        .filter(f => f.canAnswerCapability(methodName))
+        .map(f => {
+          this.log(f.name + ' answering: ' + methodName);
+          return f;
+        })
+        .map(f => f[methodName].call(f))
+        .every(result => !!result);
     } catch (e) {
       console.error(`There was an error calling ${methodName} - ${e}`);
     }
@@ -84,7 +139,7 @@ class PrivacyCompliance {
             .filter(f => f.canGenerate(methodName))
             // this feels a little weird, but by the time this is called, it will be defined
             // from below this class
-            .map(f => f[methodName].call(f, callback, privacyComplianceSingleton));
+            .map(f => f[methodName].call(f, callback));
         } catch (e) {
           console.error(`There was an error calling ${methodName} - ${e}`);
         }
@@ -124,27 +179,6 @@ class PrivacyCompliance {
     });
   }
 }
-
-/**
- * Returns true of all elements in the collection evaluate to true
- *
- * @param {Array} collection a collection of objects to evaluate
- * @return {Boolean} returns true of all elements in the collection evaluate to true
- */
-const areAllTrue = collection => {
-  return collection.filter(capability => !capability).length == 0;
-};
-
-const areAllTheSame = collection => {
-  return (
-    collection.reduce((accumulator, currentValue) => {
-      if (!accumulator.includes(currentValue)) {
-        accumulator.push(currentValue);
-      }
-      return accumulator;
-    }, []).length === 1
-  );
-};
 
 const privacyComplianceSingleton = new PrivacyCompliance().applyProxy();
 

@@ -8,6 +8,8 @@ const makeFakeFramework = (methodName, result) => {
     supportedCapabilities: () => [methodName],
     supportedGenerators: () => [],
     useConfig: () => {},
+    setPrivacyComplianceInstance: () => {},
+    log: () => {},
     name: `FakeFramework - ${methodName}`,
   };
   fakeFramework[methodName] = () => result;
@@ -28,6 +30,9 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         supportedGenerators: () => [],
+        setPrivacyComplianceInstance: () => {},
+        name: 'FakeFramework',
+        log: () => {},
         canFakeFeature,
       });
 
@@ -45,6 +50,9 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         supportedGenerators: () => [],
+        setPrivacyComplianceInstance: () => {},
+        name: 'FakeFramework',
+        log: () => {},
         canFakeFeature,
       });
 
@@ -53,6 +61,9 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         supportedGenerators: () => [],
+        setPrivacyComplianceInstance: () => {},
+        name: 'FakeFramework',
+        log: () => {},
         canFakeFeature: canFakeFeature2,
       });
 
@@ -152,6 +163,53 @@ describe('PrivacyCompliance', () => {
 
       // this should be one, because of the beforeEach function of description test block
       expect(callback.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('Logging', () => {
+    it('should support basic logging', () => {
+      expect(typeof PrivacyCompliance.log).toBe('function');
+    });
+
+    it('should not fail even when a logger is not setup', () => {
+      PrivacyCompliance.log('this goes no where');
+    });
+
+    it('should allow external logging systems to be used', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(', ')));
+
+      PrivacyCompliance.log('I respect your data');
+      expect(logEntries.includes('I respect your data')).toBeTruthy;
+    });
+
+    it('should not relog entries if second argument is false', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(', ')), false);
+
+      PrivacyCompliance.log('I respect your data');
+      expect(logEntries.length).toBe(1);
+      expect(logEntries.includes('I respect your data')).toBeTruthy;
+    });
+
+    it('should allow logs to include multiple values', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(', ')));
+
+      PrivacyCompliance.log('I respect your data', 12);
+
+      expect(logEntries.includes('I respect your data, 12')).toBeTruthy;
+    });
+
+    it('should have a log called on the instance when it is answering a capability request', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(' ')));
+
+      let fakeFramework = makeFakeFramework('canEatHotDog', true);
+
+      PrivacyCompliance.addFramework(fakeFramework);
+      PrivacyCompliance.canEatHotDog();
+      expect(logEntries.includes('FakeFramework - canEatHotDog answering: canEatHotDog')).toBeTruthy();
     });
   });
 });

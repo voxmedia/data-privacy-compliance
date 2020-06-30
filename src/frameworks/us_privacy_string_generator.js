@@ -12,9 +12,9 @@ class UsPrivacyStringGenerator extends FrameworkBase {
 
   usPrivacyString(callback = () => {}, privacyComplianceInstance) {
     let usp = '1';
-    usp += privacyComplianceInstance.hasBeenNotifiedOfRights() ? 'Y' : 'N';
-    usp += privacyComplianceInstance.canUsePersonalInformationForTargeting() ? 'N' : 'Y';
-    usp += privacyComplianceInstance.isLSPACoveredTransaction() ? 'Y' : 'N';
+    usp += this.privacyComplianceInstance.hasBeenNotifiedOfRights() ? 'Y' : 'N';
+    usp += this.privacyComplianceInstance.canUsePersonalInformationForTargeting() ? 'N' : 'Y';
+    usp += this.privacyComplianceInstance.isLSPACoveredTransaction() ? 'Y' : 'N';
     callback(usp);
   }
 }

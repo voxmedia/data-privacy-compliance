@@ -1,5 +1,7 @@
 class FrameworkBase {
-  constructor() {}
+  constructor() {
+    this.privacyComplianceInstance = null;
+  }
 
   get name() {
     return this.constructor.name;
@@ -30,20 +32,13 @@ class FrameworkBase {
   canGenerate(ability) {
     return this.supportedGenerators().includes(ability);
   }
-}
 
-class GDPRFramework extends FrameworkBase {
-  constructor() {
-    super();
-
-    this.applies = false;
-  }
-  isApplicable() {
-    return this.applies;
+  setPrivacyComplianceInstance(pc) {
+    this.privacyComplianceInstance = pc;
   }
 
-  useConfig({ gdprConsentData, gdprApplies }) {
-    this.applies = gdprApplies;
+  log(...args) {
+    this.privacyComplianceInstance && this.privacyComplianceInstance.log(`[${this.name}]`, ...args);
   }
 }
 
