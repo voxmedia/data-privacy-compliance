@@ -6,6 +6,7 @@ const makeFakeFramework = (methodName, result) => {
     canAnswerCapability: capability => methodName === capability,
     supportedCapabilities: () => [methodName],
     useConfig: () => {},
+    setPrivacyComplianceInstance: () => {},
     name: `FakeFramework - ${methodName}`,
   };
   fakeFramework[methodName] = () => result;
@@ -25,6 +26,7 @@ describe('PrivacyCompliance', () => {
         isApplicable: () => true,
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
+        setPrivacyComplianceInstance: () => {},
         canFakeFeature,
       });
 
@@ -41,6 +43,7 @@ describe('PrivacyCompliance', () => {
         isApplicable: () => true,
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
+        setPrivacyComplianceInstance: () => {},
         canFakeFeature,
       });
 
@@ -48,6 +51,7 @@ describe('PrivacyCompliance', () => {
         isApplicable: () => true,
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
+        setPrivacyComplianceInstance: () => {},
         canFakeFeature: canFakeFeature2,
       });
 
@@ -111,6 +115,36 @@ describe('PrivacyCompliance', () => {
 
       PrivacyCompliance.canObserveMouseClicks();
       expect(canObserveMouseClicks.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('Logging', () => {
+    it('should support basic logging', () => {
+      expect(typeof PrivacyCompliance.log).toBe('function');
+    });
+
+    it('should not fail even when a logger is not setup', () => {
+      PrivacyCompliance.log('this goes no where');
+    });
+
+    it('should allow external logging systems to be used', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(', ')));
+
+      PrivacyCompliance.log('I respect your data');
+
+      expect(logEntries.length).toBe(1);
+      expect(logEntries[0]).toBe('I respect your data');
+    });
+
+    it('should allow logs to include multiple values', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(', ')));
+
+      PrivacyCompliance.log('I respect your data', 12);
+
+      expect(logEntries.length).toBe(1);
+      expect(logEntries[0]).toBe('I respect your data, 12');
     });
   });
 });

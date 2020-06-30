@@ -14,10 +14,19 @@ class PrivacyCompliance {
   constructor() {
     this.frameworks = [];
     this.supportedCapabilities = new Set();
+    this.logger = () => {};
   }
 
   useConfig(someConfigs) {
     this.frameworks.forEach(f => f.useConfig(someConfigs));
+  }
+
+  useLogger(logFunction) {
+    this.logger = logFunction;
+  }
+
+  log(...args) {
+    this.logger(...args);
   }
 
   // For use with testing only
@@ -27,6 +36,8 @@ class PrivacyCompliance {
   }
 
   addFramework(frameworkInstance) {
+    this.log('Adding new framework: ', frameworkInstance.name);
+    frameworkInstance.setPrivacyComplianceInstance(privacyComplianceSingleton);
     this.frameworks.push(frameworkInstance);
     frameworkInstance.supportedCapabilities().forEach(c => this.supportedCapabilities.add(c));
   }
