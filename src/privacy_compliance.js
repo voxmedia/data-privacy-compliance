@@ -60,16 +60,15 @@ class PrivacyCompliance {
    */
   proxyToFrameworks(methodName) {
     try {
-      return areAllTrue(
-        this.frameworks
-          .filter(f => f.isApplicable())
-          .filter(f => f.canAnswerCapability(methodName))
-          .map(f => {
-            this.log(f.name + ' answering: ' + methodName);
-            return f;
-          })
-          .map(f => f[methodName].call(f))
-      );
+      return this.frameworks
+        .filter(f => f.isApplicable())
+        .filter(f => f.canAnswerCapability(methodName))
+        .map(f => {
+          this.log(f.name + ' answering: ' + methodName);
+          return f;
+        })
+        .map(f => f[methodName].call(f))
+        .every(result => !!result);
     } catch (e) {
       console.error(`There was an error calling ${methodName} - ${e}`);
     }
@@ -101,16 +100,6 @@ class PrivacyCompliance {
     });
   }
 }
-
-/**
- * Returns true of all elements in the collection evaluate to true
- *
- * @param {Array} collection a collection of objects to evaluate
- * @return {Boolean} returns true of all elements in the collection evaluate to true
- */
-const areAllTrue = collection => {
-  return collection.filter(capability => !capability).length == 0;
-};
 
 const privacyComplianceSingleton = new PrivacyCompliance().applyProxy();
 
