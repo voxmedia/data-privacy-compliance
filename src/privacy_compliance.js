@@ -14,15 +14,21 @@ class PrivacyCompliance {
   constructor() {
     this.frameworks = [];
     this.supportedCapabilities = new Set();
-    this.logger = () => {};
+    this.logEntries = [];
+    this.logger = (...args) => {
+      this.logEntries.push(args);
+    };
   }
 
   useConfig(someConfigs) {
     this.frameworks.forEach(f => f.useConfig(someConfigs));
   }
 
-  useLogger(logFunction) {
+  useLogger(logFunction, relogMissedEntries = true) {
     this.logger = logFunction;
+    if (relogMissedEntries) {
+      this.logEntries.forEach(entry => this.log(...entry));
+    }
   }
 
   log(...args) {

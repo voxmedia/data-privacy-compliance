@@ -28,6 +28,7 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         setPrivacyComplianceInstance: () => {},
+        name: 'FakeFramework',
         log: () => {},
         canFakeFeature,
       });
@@ -46,6 +47,7 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         setPrivacyComplianceInstance: () => {},
+        name: 'FakeFramework',
         log: () => {},
         canFakeFeature,
       });
@@ -55,6 +57,7 @@ describe('PrivacyCompliance', () => {
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
         setPrivacyComplianceInstance: () => {},
+        name: 'FakeFramework',
         log: () => {},
         canFakeFeature: canFakeFeature2,
       });
@@ -136,9 +139,16 @@ describe('PrivacyCompliance', () => {
       PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(', ')));
 
       PrivacyCompliance.log('I respect your data');
+      expect(logEntries.includes('I respect your data')).toBeTruthy;
+    });
 
+    it('should not relog entries if second argument is false', () => {
+      let logEntries = [];
+      PrivacyCompliance.useLogger((...args) => logEntries.push(args.join(', ')), false);
+
+      PrivacyCompliance.log('I respect your data');
       expect(logEntries.length).toBe(1);
-      expect(logEntries[0]).toBe('I respect your data');
+      expect(logEntries.includes('I respect your data')).toBeTruthy;
     });
 
     it('should allow logs to include multiple values', () => {
@@ -147,8 +157,7 @@ describe('PrivacyCompliance', () => {
 
       PrivacyCompliance.log('I respect your data', 12);
 
-      expect(logEntries.length).toBe(1);
-      expect(logEntries[0]).toBe('I respect your data, 12');
+      expect(logEntries.includes('I respect your data, 12')).toBeTruthy;
     });
 
     it('should have a log called on the instance when it is answering a capability request', () => {
