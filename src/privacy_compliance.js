@@ -76,7 +76,7 @@ class PrivacyCompliance {
     return this.supportedCapabilities.has(capability);
   }
 
-  hasFrameworkLoadedToGenerate(ability) {
+  canGenerate(ability) {
     return this.supportedGenerators.has(ability);
   }
 
@@ -144,7 +144,7 @@ class PrivacyCompliance {
    * @returns {Function} the function to execute, with callback of the generators response
    */
   proxyToFrameworkGenerators(methodName) {
-    if (this.hasFrameworkLoadedToGenerate(methodName)) {
+    if (this.canGenerate(methodName)) {
       return (callback = () => {}) => {
         try {
           this.frameworks
