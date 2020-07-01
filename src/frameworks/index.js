@@ -1,6 +1,5 @@
 const CcpaOnChorus = require('./ccpa_on_chorus');
 const CcpaFromUsPrivacyString = require('./ccpa_from_us_privacy_string');
+const UsPrivacyStringGenerator = require('./us_privacy_string_generator');
 
-const defaultFrameworks = [CcpaOnChorus, CcpaFromUsPrivacyString];
-
-module.exports = defaultFrameworks;
+module.exports = [CcpaOnChorus, CcpaFromUsPrivacyString, UsPrivacyStringGenerator];

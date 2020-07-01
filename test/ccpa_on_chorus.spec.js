@@ -44,12 +44,12 @@ describe('CCPA for Chorus Support', () => {
 
     it('should restrict personal info targeting, when opt out of sale cookie is set', () => {
       document.cookie = '_chorus_ccpa_consent_donotsell=abcd1234';
-      window.expect(PrivacyCompliance.canUsePersonalInformationForTargeting()).toBeFalsy();
+      expect(PrivacyCompliance.canUsePersonalInformationForTargeting()).toBeFalsy();
     });
 
     it('should restrict personal info targeting, when opt out of sale cookie is set', () => {
       document.cookie = '_chorus_ccpa_consent=abcd1234';
-      window.expect(PrivacyCompliance.hasBeenNotifiedOfRights()).toBeTruthy();
+      expect(PrivacyCompliance.hasBeenNotifiedOfRights()).toBeTruthy();
     });
   });
 });

@@ -1,10 +1,12 @@
 const PrivacyCompliance = require('../src/privacy_compliance');
+const TestHelpers = require('./test_helpers');
 
 const makeFakeFramework = (methodName, result) => {
   let fakeFramework = {
     isApplicable: () => true,
     canAnswerCapability: capability => methodName === capability,
     supportedCapabilities: () => [methodName],
+    supportedGenerators: () => [],
     useConfig: () => {},
     setPrivacyComplianceInstance: () => {},
     log: () => {},
@@ -27,6 +29,7 @@ describe('PrivacyCompliance', () => {
         isApplicable: () => true,
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
+        supportedGenerators: () => [],
         setPrivacyComplianceInstance: () => {},
         name: 'FakeFramework',
         log: () => {},
@@ -46,6 +49,7 @@ describe('PrivacyCompliance', () => {
         isApplicable: () => true,
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
+        supportedGenerators: () => [],
         setPrivacyComplianceInstance: () => {},
         name: 'FakeFramework',
         log: () => {},
@@ -56,6 +60,7 @@ describe('PrivacyCompliance', () => {
         isApplicable: () => true,
         canAnswerCapability: () => true,
         supportedCapabilities: () => ['canFakeFeature'],
+        supportedGenerators: () => [],
         setPrivacyComplianceInstance: () => {},
         name: 'FakeFramework',
         log: () => {},
@@ -122,6 +127,42 @@ describe('PrivacyCompliance', () => {
 
       PrivacyCompliance.canObserveMouseClicks();
       expect(canObserveMouseClicks.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('Support for Generators', () => {
+    beforeEach(() => {
+      PrivacyCompliance.reset();
+      PrivacyCompliance.addFramework(TestHelpers.makeTemporaryGeneratorFrameworkInstance('eatNachos'));
+    });
+
+    it('will use callbacks to support generators', () => {
+      const callback = jest.fn();
+      PrivacyCompliance.Generator.eatNachos(callback);
+
+      expect(callback.mock.calls.length).toBe(1);
+    });
+
+    it('will callback as many times as there are generator functions that support this generator', () => {
+      PrivacyCompliance.addFramework(TestHelpers.makeTemporaryGeneratorFrameworkInstance('eatNachos'));
+
+      const callback = jest.fn();
+      PrivacyCompliance.Generator.eatNachos(callback);
+
+      expect(callback.mock.calls.length).toBe(2);
+    });
+
+    it('will skip frameworks that are not applicable', () => {
+      const secondNachoFramework = TestHelpers.makeTemporaryGeneratorFrameworkInstance('eatNachos');
+      // but mark this as not applicable
+      secondNachoFramework.isApplicable = () => false;
+
+      PrivacyCompliance.addFramework(secondNachoFramework);
+      const callback = jest.fn();
+      PrivacyCompliance.Generator.eatNachos(callback);
+
+      // this should be one, because of the beforeEach function of description test block
+      expect(callback.mock.calls.length).toBe(1);
     });
   });
 

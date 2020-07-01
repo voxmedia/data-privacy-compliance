@@ -14,6 +14,7 @@ class PrivacyCompliance {
   constructor() {
     this.frameworks = [];
     this.supportedCapabilities = new Set();
+    this.supportedGenerators = new Set();
     this.logEntries = [];
     this.logger = (...args) => {
       this.logEntries.push(args);
@@ -53,15 +54,12 @@ class PrivacyCompliance {
     }
   }
 
-  log(...args) {
-    this.logger(...args);
-  }
-
   addFramework(frameworkInstance) {
     this.log('Adding new framework: ', frameworkInstance.name);
     frameworkInstance.setPrivacyComplianceInstance(privacyComplianceSingleton);
     this.frameworks.push(frameworkInstance);
     frameworkInstance.supportedCapabilities().forEach(c => this.supportedCapabilities.add(c));
+    frameworkInstance.supportedGenerators().forEach(c => this.supportedGenerators.add(c));
   }
 
   /**
@@ -78,6 +76,10 @@ class PrivacyCompliance {
     return this.supportedCapabilities.has(capability);
   }
 
+  canGenerate(ability) {
+    return this.supportedGenerators.has(ability);
+  }
+
   /**
    * Returns a list of applicable frameworks for this environment.
    */
@@ -85,10 +87,23 @@ class PrivacyCompliance {
     return this.frameworks.filter(f => f.isApplicable());
   }
 
+  log(...args) {
+    this.logger(...args);
+  }
+
+  get Generator() {
+    return new Proxy(this, {
+      get: (privacyComplianceInstance, property) => {
+        return privacyComplianceInstance.proxyToFrameworkGenerators(property);
+      },
+    });
+  }
+
   // For use with testing only
   reset() {
     this.frameworks = [];
     this.supportedCapabilities = new Set();
+    this.supportedGenerators = new Set();
   }
 
   /**
@@ -116,6 +131,44 @@ class PrivacyCompliance {
   }
 
   /**
+   * This method will take a string, translate it into a method and call it
+   * on the added frameworks. If all applicable frameworks support this generator
+   * then it will be called, with the given passback.
+   *
+   * Note this is a little more complex than capabilities, because like capabilities
+   * multiple frameworks can be called for this generator, and there is no convenient way
+   * to collect those responses, so instead it takes a callback that will be executed for
+   * every generator run.
+   *
+   * @param {String} methodName the name of methods to call on the base frameworks
+   * @returns {Function} the function to execute, with callback of the generators response
+   */
+  proxyToFrameworkGenerators(methodName) {
+    if (this.canGenerate(methodName)) {
+      return (callback = () => {}) => {
+        try {
+          this.frameworks
+            .filter(f => f.isApplicable())
+            .filter(f => f.canGenerate(methodName))
+            .forEach(f => f[methodName].call(f, callback));
+        } catch (e) {
+          console.error(`There was an error calling ${methodName} - ${e}`);
+        }
+      };
+    } else {
+      this.throwUnsupportedError(methodName);
+    }
+  }
+
+  throwUnsupportedError(method) {
+    throw new TypeError(
+      `Can not call '${method}'. It is not found in the loaded frameworks. Supported capabilities: ${Array.from(
+        this.supportedCapabilities
+      ).join(', ')}`
+    );
+  }
+
+  /**
    * This uses a modern Proxy() object to support arbitrary missing methods
    * which allows the frameworks to declare their own capability methods without
    * needing to add those to this class.
@@ -123,19 +176,15 @@ class PrivacyCompliance {
 
   applyProxy() {
     return new Proxy(this, {
-      get: (object, property) => {
-        if (Reflect.has(object, property)) {
-          return Reflect.get(object, property);
-        } else if (object.hasFrameworkLoadedToAnswerCapability(property)) {
+      get: (privacyComplianceInstance, property) => {
+        if (Reflect.has(privacyComplianceInstance, property)) {
+          return Reflect.get(privacyComplianceInstance, property);
+        } else if (privacyComplianceInstance.hasFrameworkLoadedToAnswerCapability(property)) {
           return () => {
-            return object.proxyToFrameworks(property);
+            return privacyComplianceInstance.proxyToFrameworks(property);
           };
         } else {
-          throw new TypeError(
-            `Can not call ${property}(). It is not found in the loaded frameworks. Supported capabilities: ${Array.from(
-              object.supportedCapabilities
-            ).join(', ')}`
-          );
+          privacyComplianceInstance.throwUnsupportedError(property);
         }
       },
     });

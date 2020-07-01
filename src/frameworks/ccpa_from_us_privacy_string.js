@@ -22,7 +22,7 @@ class CCPAFromUSPrivacyString extends FrameworkBase {
   }
 
   supportedCapabilities() {
-    return ['canUsePersonalInformationForTargeting', 'hasBeenNotifiedOfRights'];
+    return ['canUsePersonalInformationForTargeting', 'hasBeenNotifiedOfRights', 'isLSPACoveredTransaction'];
   }
 
   canUsePersonalInformationForTargeting() {
@@ -37,6 +37,10 @@ class CCPAFromUSPrivacyString extends FrameworkBase {
     if (!this.supportedUsPrivacyStringVersion()) return true;
     if (!this.consentStringAcknowledgesUserHasBeenNotifiedOfRights()) return true;
     return this.usPrivacyString[2] !== 'Y';
+  }
+
+  isLSPACoveredTransaction() {
+    return this.supportedUsPrivacyStringVersion() && this.usPrivacyString[3] === 'Y';
   }
 
   consentStringAcknowledgesUserHasBeenNotifiedOfRights() {
