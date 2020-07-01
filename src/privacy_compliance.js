@@ -150,7 +150,7 @@ class PrivacyCompliance {
           this.frameworks
             .filter(f => f.isApplicable())
             .filter(f => f.canGenerate(methodName))
-            .map(f => f[methodName].call(f, callback));
+            .forEach(f => f[methodName].call(f, callback));
         } catch (e) {
           console.error(`There was an error calling ${methodName} - ${e}`);
         }
