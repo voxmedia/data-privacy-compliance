@@ -130,6 +130,19 @@ class PrivacyCompliance {
     }
   }
 
+  /**
+   * This method will take a string, translate it into a method and call it
+   * on the added frameworks. If all applicable frameworks support this generator
+   * then it will be called, with the given passback.
+   *
+   * Note this is a little more complex than capabilities, because like capabilities
+   * multiple frameworks can be called for this generator, and there is no convenient way
+   * to collect those responses, so instead it takes a callback that will be executed for
+   * every generator run.
+   *
+   * @param {String} methodName the name of methods to call on the base frameworks
+   * @returns {Function} the function to execute, with callback of the generators response
+   */
   proxyToFrameworkGenerators(methodName) {
     if (this.hasFrameworkLoadedToGenerate(methodName)) {
       return (callback = () => {}) => {
@@ -137,8 +150,6 @@ class PrivacyCompliance {
           this.frameworks
             .filter(f => f.isApplicable())
             .filter(f => f.canGenerate(methodName))
-            // this feels a little weird, but by the time this is called, it will be defined
-            // from below this class
             .map(f => f[methodName].call(f, callback));
         } catch (e) {
           console.error(`There was an error calling ${methodName} - ${e}`);
