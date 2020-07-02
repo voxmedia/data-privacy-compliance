@@ -55,7 +55,7 @@ class PrivacyCompliance {
   }
 
   addFramework(frameworkInstance) {
-    this.log('Adding new framework: ', frameworkInstance.name);
+    this.log('Adding new framework: ', frameworkInstance.name());
     frameworkInstance.setPrivacyComplianceInstance(privacyComplianceSingleton);
     this.frameworks.push(frameworkInstance);
     frameworkInstance.supportedCapabilities().forEach(c => this.supportedCapabilities.add(c));
@@ -120,7 +120,7 @@ class PrivacyCompliance {
         .filter(f => f.isApplicable())
         .filter(f => f.canAnswerCapability(methodName))
         .map(f => {
-          this.log(f.name + ' answering: ' + methodName);
+          this.log(f.name() + ' answering: ' + methodName);
           return f;
         })
         .map(f => f[methodName].call(f))
