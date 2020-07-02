@@ -10,7 +10,7 @@ const makeFakeFramework = (methodName, result) => {
     useConfig: () => {},
     setPrivacyComplianceInstance: () => {},
     log: () => {},
-    name: `FakeFramework - ${methodName}`,
+    name: () => `FakeFramework - ${methodName}`,
   };
   fakeFramework[methodName] = () => result;
   return fakeFramework;
@@ -31,7 +31,7 @@ describe('PrivacyCompliance', () => {
         supportedCapabilities: () => ['canFakeFeature'],
         supportedGenerators: () => [],
         setPrivacyComplianceInstance: () => {},
-        name: 'FakeFramework',
+        name: () => 'FakeFramework',
         log: () => {},
         canFakeFeature,
       });
@@ -51,7 +51,7 @@ describe('PrivacyCompliance', () => {
         supportedCapabilities: () => ['canFakeFeature'],
         supportedGenerators: () => [],
         setPrivacyComplianceInstance: () => {},
-        name: 'FakeFramework',
+        name: () => 'FakeFramework',
         log: () => {},
         canFakeFeature,
       });
@@ -62,7 +62,7 @@ describe('PrivacyCompliance', () => {
         supportedCapabilities: () => ['canFakeFeature'],
         supportedGenerators: () => [],
         setPrivacyComplianceInstance: () => {},
-        name: 'FakeFramework',
+        name: () => 'FakeFramework',
         log: () => {},
         canFakeFeature: canFakeFeature2,
       });

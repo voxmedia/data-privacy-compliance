@@ -11,6 +11,10 @@ class CCPAFromUSPrivacyString extends FrameworkBase {
     this.usPrivacyString = '';
   }
 
+  name() {
+    return 'CCPAFromUSPrivacyString';
+  }
+
   useConfig({ usp }) {
     if (usp) {
       this.usPrivacyString = ('' + usp).toUpperCase();

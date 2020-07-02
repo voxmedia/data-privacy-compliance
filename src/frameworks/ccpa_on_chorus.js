@@ -2,6 +2,10 @@ const Cookie = require('../lib/cookie');
 const FrameworkBase = require('./base');
 
 class CcpaOnChorus extends FrameworkBase {
+  name() {
+    return 'CcpaOnChorus';
+  }
+
   isApplicable() {
     return !!window && !!window.Chorus;
   }

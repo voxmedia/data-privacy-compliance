@@ -3,12 +3,12 @@ class FrameworkBase {
     this.privacyComplianceInstance = null;
   }
 
-  get name() {
-    return this.constructor.name;
-  }
-
   static isAutoLoaded() {
     return true;
+  }
+
+  name() {
+    return 'FrameworkBase';
   }
 
   isApplicable() {
@@ -38,7 +38,7 @@ class FrameworkBase {
   }
 
   log(...args) {
-    this.privacyComplianceInstance && this.privacyComplianceInstance.log(`[${this.name}]`, ...args);
+    this.privacyComplianceInstance && this.privacyComplianceInstance.log(`[${this.name()}]`, ...args);
   }
 }
 
