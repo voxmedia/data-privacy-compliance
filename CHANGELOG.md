@@ -1,3 +1,7 @@
+## 1.3.1 (July 2nd, 2020)
+
+- Point to Babel-processed code in the `/dist` folder
+
 ## 1.3.0 (July 2nd, 2020)
 
 - Adds US Privacy API support (https://github.com/InteractiveAdvertisingBureau/USPrivacy/blob/master/CCPA/USP%20API.md)
