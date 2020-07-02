@@ -8,7 +8,7 @@ This code is responsible for supporting the legislation and implementing the fra
 
 _Initial sketch._
 
-
+```
 ╔════════════════════════════════════════════════╗
 ║                 CAPABILITIES                   ║
 ║                                                ║
@@ -51,3 +51,4 @@ _Initial sketch._
 │              │ │              │ │              │
 │              │ │              │ │              │
 └──────────────┘ └──────────────┘ └──────────────┘
+```
