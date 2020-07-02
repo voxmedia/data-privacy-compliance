@@ -1,10 +1,216 @@
-"use strict";
+'use strict';
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+require('core-js/modules/es.array.concat');
+require('core-js/modules/es.array.every');
+require('core-js/modules/es.array.filter');
+require('core-js/modules/es.array.for-each');
+require('core-js/modules/es.array.from');
+require('core-js/modules/es.array.iterator');
+require('core-js/modules/es.array.join');
+require('core-js/modules/es.array.map');
+require('core-js/modules/es.function.name');
+require('core-js/modules/es.object.to-string');
+require('core-js/modules/es.reflect.get');
+require('core-js/modules/es.reflect.has');
+require('core-js/modules/es.set');
+require('core-js/modules/es.string.iterator');
+require('core-js/modules/web.dom-collections.for-each');
+require('core-js/modules/web.dom-collections.iterator');
+require('core-js/modules/es.map');
+require('core-js/modules/es.regexp.exec');
+require('core-js/modules/es.string.split');
+require('core-js/modules/es.string.trim');
+require('core-js/modules/es.array.includes');
+require('core-js/modules/es.string.includes');
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _typeof(obj) {
+  "@babel/helpers - typeof";
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+/**
+ * Gets all the cookies as a Map
+ *
+ * @returns Map of cookie values
+ */
+function getAllCookies() {
+  return new Map(document.cookie.split(';').map(function (cookie) {
+    return cookie.trim().split('=');
+  }));
+}
+/**
+ * Checks if cookie exists
+ *
+ * @param {String} name name of cookie
+ * @return {Boolean} true of cookie is present
+ */
+
+
+function hasCookie(name) {
+  return getAllCookies().has(name);
+}
+/**
+ * Gets the cookie value
+ *
+ * @param {String} name name of cookie
+ * @return {String} the value of the cookie
+ */
+
+
+function getCookie(name) {
+  return getAllCookies().get(name);
+}
+
+var cookie = {
+  getAllCookies: getAllCookies,
+  hasCookie: hasCookie,
+  getCookie: getCookie
+};
 
 var FrameworkBase = /*#__PURE__*/function () {
   function FrameworkBase() {
@@ -26,7 +232,6 @@ var FrameworkBase = /*#__PURE__*/function () {
   }, {
     key: "useConfig",
     value: function useConfig() {
-      var someConfigs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     }
   }, {
     key: "supportedCapabilities",
@@ -74,38 +279,62 @@ var FrameworkBase = /*#__PURE__*/function () {
   return FrameworkBase;
 }();
 
-module.exports = FrameworkBase;
-"use strict";
+var base = FrameworkBase;
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+var CcpaOnChorus = /*#__PURE__*/function (_FrameworkBase) {
+  _inherits(CcpaOnChorus, _FrameworkBase);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  var _super = _createSuper(CcpaOnChorus);
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+  function CcpaOnChorus() {
+    _classCallCheck(this, CcpaOnChorus);
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+    return _super.apply(this, arguments);
+  }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+  _createClass(CcpaOnChorus, [{
+    key: "name",
+    value: function name() {
+      return 'CcpaOnChorus';
+    }
+  }, {
+    key: "isApplicable",
+    value: function isApplicable() {
+      return !!window && !!window.Chorus;
+    }
+  }, {
+    key: "supportedCapabilities",
+    value: function supportedCapabilities() {
+      return ['canUsePersonalInformationForTargeting', 'hasBeenNotifiedOfRights', 'isLSPACoveredTransaction'];
+    }
+  }, {
+    key: "canUsePersonalInformationForTargeting",
+    value: function canUsePersonalInformationForTargeting() {
+      return !cookie.hasCookie('_chorus_ccpa_consent_donotsell');
+    }
+  }, {
+    key: "hasBeenNotifiedOfRights",
+    value: function hasBeenNotifiedOfRights() {
+      // see https://github.com/voxmedia/sbn/commit/ce74ab006c89afe799afffa2a31137454d9e5bb3
+      return cookie.hasCookie('_chorus_ccpa_consent');
+    }
+  }, {
+    key: "isLSPACoveredTransaction",
+    value: function isLSPACoveredTransaction() {
+      return true;
+    }
+  }]);
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+  return CcpaOnChorus;
+}(base);
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+var ccpa_on_chorus = CcpaOnChorus;
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var FrameworkBase = require('./base');
 /**
  * Implements usprivacy string framework
  * for more information on the US Privacy string see:
  * https://github.com/InteractiveAdvertisingBureau/USPrivacy/blob/master/CCPA/US%20Privacy%20String.md#us-privacy-string-format
  */
-
 
 var CCPAFromUSPrivacyString = /*#__PURE__*/function (_FrameworkBase) {
   _inherits(CCPAFromUSPrivacyString, _FrameworkBase);
@@ -181,119 +410,9 @@ var CCPAFromUSPrivacyString = /*#__PURE__*/function (_FrameworkBase) {
   }]);
 
   return CCPAFromUSPrivacyString;
-}(FrameworkBase);
+}(base);
 
-module.exports = CCPAFromUSPrivacyString;
-"use strict";
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var Cookie = require('../lib/cookie');
-
-var FrameworkBase = require('./base');
-
-var CcpaOnChorus = /*#__PURE__*/function (_FrameworkBase) {
-  _inherits(CcpaOnChorus, _FrameworkBase);
-
-  var _super = _createSuper(CcpaOnChorus);
-
-  function CcpaOnChorus() {
-    _classCallCheck(this, CcpaOnChorus);
-
-    return _super.apply(this, arguments);
-  }
-
-  _createClass(CcpaOnChorus, [{
-    key: "name",
-    value: function name() {
-      return 'CcpaOnChorus';
-    }
-  }, {
-    key: "isApplicable",
-    value: function isApplicable() {
-      return !!window && !!window.Chorus;
-    }
-  }, {
-    key: "supportedCapabilities",
-    value: function supportedCapabilities() {
-      return ['canUsePersonalInformationForTargeting', 'hasBeenNotifiedOfRights', 'isLSPACoveredTransaction'];
-    }
-  }, {
-    key: "canUsePersonalInformationForTargeting",
-    value: function canUsePersonalInformationForTargeting() {
-      return !Cookie.hasCookie('_chorus_ccpa_consent_donotsell');
-    }
-  }, {
-    key: "hasBeenNotifiedOfRights",
-    value: function hasBeenNotifiedOfRights() {
-      // see https://github.com/voxmedia/sbn/commit/ce74ab006c89afe799afffa2a31137454d9e5bb3
-      return Cookie.hasCookie('_chorus_ccpa_consent');
-    }
-  }, {
-    key: "isLSPACoveredTransaction",
-    value: function isLSPACoveredTransaction() {
-      return true;
-    }
-  }]);
-
-  return CcpaOnChorus;
-}(FrameworkBase);
-
-module.exports = CcpaOnChorus;
-"use strict";
-
-var CcpaOnChorus = require('./ccpa_on_chorus');
-
-var CcpaFromUsPrivacyString = require('./ccpa_from_us_privacy_string');
-
-var UsPrivacyStringAndAPIGenerator = require('./us_privacy_string_and_api_generator');
-
-module.exports = [CcpaOnChorus, CcpaFromUsPrivacyString, UsPrivacyStringAndAPIGenerator];
-"use strict";
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var FrameworkBase = require('./base');
+var ccpa_from_us_privacy_string = CCPAFromUSPrivacyString;
 
 var US_PRIVACY_API_VERSION = 1;
 /**
@@ -463,70 +582,12 @@ var UsPrivacyStringAndAPIGenerator = /*#__PURE__*/function (_FrameworkBase) {
   }]);
 
   return UsPrivacyStringAndAPIGenerator;
-}(FrameworkBase);
+}(base);
 
-module.exports = UsPrivacyStringAndAPIGenerator;
-"use strict";
+var us_privacy_string_and_api_generator = UsPrivacyStringAndAPIGenerator;
 
-/**
- * Gets all the cookies as a Map
- *
- * @returns Map of cookie values
- */
-function getAllCookies() {
-  return new Map(document.cookie.split(';').map(function (cookie) {
-    return cookie.trim().split('=');
-  }));
-}
-/**
- * Checks if cookie exists
- *
- * @param {String} name name of cookie
- * @return {Boolean} true of cookie is present
- */
+var frameworks = [ccpa_on_chorus, ccpa_from_us_privacy_string, us_privacy_string_and_api_generator];
 
-
-function hasCookie(name) {
-  return getAllCookies().has(name);
-}
-/**
- * Gets the cookie value
- *
- * @param {String} name name of cookie
- * @return {String} the value of the cookie
- */
-
-
-function getCookie(name) {
-  return getAllCookies().get(name);
-}
-
-module.exports = {
-  getAllCookies: getAllCookies,
-  hasCookie: hasCookie,
-  getCookie: getCookie
-};
-"use strict";
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var frameworks = require('./frameworks');
 /**
  * The public Privacy Compliance class, which is exported as a singleton
  *
@@ -537,7 +598,6 @@ var frameworks = require('./frameworks');
  * to make it look like this class has a lot more functions
  * than it really does
  */
-
 
 var PrivacyCompliance = /*#__PURE__*/function () {
   function PrivacyCompliance() {
@@ -784,6 +844,7 @@ frameworks.filter(function (f) {
 }).forEach(function (f) {
   privacyComplianceSingleton.addFramework(new f());
 });
-module.exports = privacyComplianceSingleton;
+var privacy_compliance = privacyComplianceSingleton;
 
+module.exports = privacy_compliance;
 //# sourceMappingURL=data-privacy-compliance.js.map
