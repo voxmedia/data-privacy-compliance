@@ -1,7 +1,6 @@
 class FrameworkBase {
   constructor() {
     this.privacyComplianceInstance = null;
-    this.frameworkName = this.constructor.name;
   }
 
   static isAutoLoaded() {
@@ -9,7 +8,7 @@ class FrameworkBase {
   }
 
   name() {
-    return this.frameworkName;
+    return 'FrameworkBase';
   }
 
   isApplicable() {

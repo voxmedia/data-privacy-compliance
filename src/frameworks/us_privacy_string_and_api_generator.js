@@ -14,6 +14,10 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
     this.document = document;
   }
 
+  name() {
+    return 'UsPrivacyStringAndAPIGenerator';
+  }
+
   supportedGenerators() {
     return ['usPrivacyString', 'installPrivacyAPI'];
   }
