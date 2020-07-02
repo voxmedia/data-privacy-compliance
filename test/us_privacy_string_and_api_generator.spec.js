@@ -63,14 +63,16 @@ describe('USPrivacyAPI', () => {
   it('should support basic functionality', () => {
     addFakeCCPAFramework();
 
-    let privacyString, success;
+    let privacyString, success, version;
 
     window.__uspapi('getUSPData', 1, (response, wasSuccess) => {
-      privacyString = response;
+      privacyString = response.uspString;
+      version = response.version;
       success = wasSuccess;
     });
 
     expect(privacyString).toBe('1YYY');
+    expect(version).toBe(1);
     expect(success).toBe(true);
   });
 
@@ -130,7 +132,10 @@ describe('__uspapiLocator iframe support', () => {
       const papiResponse = event.data.__uspapiReturn;
       expect(papiResponse.callId).toBe(id);
       expect(papiResponse.success).toBe(true);
-      expect(papiResponse.returnValue).toBe('1YYN');
+      expect(papiResponse.returnValue).toEqual({
+        uspString: '1YYN',
+        version: 1,
+      });
       done();
     });
 

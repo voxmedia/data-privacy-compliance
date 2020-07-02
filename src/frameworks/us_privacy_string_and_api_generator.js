@@ -1,5 +1,7 @@
 const FrameworkBase = require('./base');
 
+const US_PRIVACY_API_VERSION = 1;
+
 /**
  * Implements usprivacy string framework
  * for more information on the US Privacy string see:
@@ -32,7 +34,7 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
 
   // Private methods ---------
   buildUsPrivacyString() {
-    let usp = '1';
+    let usp = '' + US_PRIVACY_API_VERSION;
     usp += this.privacyComplianceInstance.hasBeenNotifiedOfRights() ? 'Y' : 'N';
     usp += this.privacyComplianceInstance.canUsePersonalInformationForTargeting() ? 'N' : 'Y';
     usp += this.privacyComplianceInstance.isLSPACoveredTransaction() ? 'Y' : 'N';
@@ -45,9 +47,9 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
     }
 
     let canSuccessfullyAnswer = true;
-    let usPrivacyDataString = '1---';
+    let usPrivacyDataString = `${US_PRIVACY_API_VERSION}---`;
 
-    if (version !== 1) {
+    if (version !== US_PRIVACY_API_VERSION) {
       console.error(`__uspapi: Only able to handle version 1`);
       canSuccessfullyAnswer = false;
     }
@@ -64,7 +66,13 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
     this.log(
       `${canSuccessfullyAnswer ? 'Successfully' : 'Unsuccessfully'} handled CCPA privacy request ${usPrivacyDataString}`
     );
-    callback(usPrivacyDataString, canSuccessfullyAnswer);
+    callback(
+      {
+        uspString: usPrivacyDataString,
+        version: US_PRIVACY_API_VERSION,
+      },
+      canSuccessfullyAnswer
+    );
   }
 
   /**
@@ -118,11 +126,11 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
         this.handleUSPrivacyAPI(
           uspapiCallParameters.command,
           uspapiCallParameters.version,
-          (usPrivacyDataString, wasSuccessful) => {
+          (uspData, wasSuccessful) => {
             targetSource.postMessage(
               {
                 __uspapiReturn: {
-                  returnValue: usPrivacyDataString,
+                  returnValue: uspData,
                   success: wasSuccessful,
                   callId: uspapiCallParameters.callId,
                 },
