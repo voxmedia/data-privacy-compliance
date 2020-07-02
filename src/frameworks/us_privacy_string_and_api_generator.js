@@ -13,6 +13,7 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
     this.window = window;
     this.document = document;
   }
+
   supportedGenerators() {
     return ['usPrivacyString', 'installPrivacyAPI'];
   }
@@ -66,6 +67,7 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
     this.log(
       `${canSuccessfullyAnswer ? 'Successfully' : 'Unsuccessfully'} handled CCPA privacy request ${usPrivacyDataString}`
     );
+
     callback(
       {
         uspString: usPrivacyDataString,
