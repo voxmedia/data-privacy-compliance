@@ -17,14 +17,14 @@
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "jest": "^26.0.1",
-    "rollup": "^2.19.0"
+    "rollup": "^2.19.0",
+    "proxy-polyfill": "^0.3.2"
   },
   "scripts": {
     "test": "NODE_ENV=test jest",
     "build": "NODE_ENV=production rollup --config"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.10.4",
-    "proxy-polyfill": "^0.3.2"
+    "@babel/polyfill": "^7.10.4"
   }
 }

@@ -1,6 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import babel from '@rollup/plugin-babel';
+import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import pkg from './package.json';
 
 export default [
@@ -18,7 +18,11 @@ export default [
       commonjs(),
       babel({
         exclude: ['node_modules/**'],
+        include: ['node_modules/proxy-polyfill', 'src/**'],
         babelHelpers: 'bundled',
+      }),
+      getBabelOutputPlugin({
+        presets: ['@babel/preset-env'],
       }),
     ],
   },
