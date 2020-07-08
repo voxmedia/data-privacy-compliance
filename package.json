@@ -1,10 +1,8 @@
 {
   "name": "data-privacy-compliance",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Vox Media's library for implementing data privacy frameworks",
-  "main": "dist/data-privacy-compliance.cjs.js",
-  "module": "dist/data-privacy-compliance.esm.js",
-  "browser": "dist/data-privacy-compliance.umd.js",
+  "main": "dist/data-privacy-compliance.js",
   "license": "Apache-2.0",
   "url": "https://github.com/voxmedia/data-privacy-compliance",
   "private": false,
@@ -26,6 +24,7 @@
     "build": "NODE_ENV=production rollup --config"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.10.4"
+    "@babel/polyfill": "^7.10.4",
+    "proxy-polyfill": "^0.3.2"
   }
 }

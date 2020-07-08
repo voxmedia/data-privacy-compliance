@@ -4,9 +4,11 @@
       "@babel/preset-env",
       {
         "targets": {
-          "browsers": ["last 2 versions", "safari >= 7"]
+          "browsers": ["last 2 versions", "> 1%", "IE 11", "not IE 10"]
         },
-        "modules": false
+        "modules": false,
+        "useBuiltIns": "usage",
+        "corejs": "2"
       }
     ]
   ]

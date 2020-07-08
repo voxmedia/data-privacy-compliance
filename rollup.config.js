@@ -4,25 +4,6 @@ import babel from '@rollup/plugin-babel';
 import pkg from './package.json';
 
 export default [
-  // browser-friendly UMD build
-  {
-    input: 'src/index.js',
-    output: {
-      name: 'PrivacyCompliance',
-      file: pkg.browser,
-      sourcemap: true,
-      format: 'umd',
-    },
-    plugins: [
-      resolve(), // so Rollup can find `ms`
-      commonjs(), // so Rollup can convert `ms` to an ES module
-      babel({
-        exclude: ['node_modules/**'],
-        babelHelpers: 'bundled',
-      }),
-    ],
-  },
-
   // CommonJS (for Node) and ES module (for bundlers) build.
   // (We could have three entries in the configuration array
   // instead of two, but it's quicker to generate multiple
@@ -31,12 +12,10 @@ export default [
   // `file` and `format` for each target)
   {
     input: 'src/index.js',
-    external: ['proxy-polyfill'],
-    output: [
-      { file: pkg.module, format: 'es', sourcemap: true },
-      { file: pkg.main, format: 'cjs', sourcemap: true },
-    ],
+    output: [{ file: pkg.main, format: 'cjs', sourcemap: true }],
     plugins: [
+      resolve(),
+      commonjs(),
       babel({
         exclude: ['node_modules/**'],
         babelHelpers: 'bundled',
