@@ -1,4 +1,5 @@
 const frameworks = require('./frameworks');
+require('proxy-polyfill');
 
 /**
  * The public Privacy Compliance class, which is exported as a singleton
