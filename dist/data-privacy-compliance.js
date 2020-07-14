@@ -2109,8 +2109,8 @@ var CcpaOnChorus = /*#__PURE__*/function (_FrameworkBase) {
   }, {
     key: "hasBeenNotifiedOfRights",
     value: function hasBeenNotifiedOfRights() {
-      // see https://github.com/voxmedia/sbn/commit/ce74ab006c89afe799afffa2a31137454d9e5bb3
-      return cookie.hasCookie('_chorus_ccpa_consent');
+      // see https://voxmedia.slack.com/archives/CPJDM3CCU/p1594741208106400
+      return true;
     }
   }, {
     key: "isLSPACoveredTransaction",
