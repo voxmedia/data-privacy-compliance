@@ -19,8 +19,8 @@ class CcpaOnChorus extends FrameworkBase {
   }
 
   hasBeenNotifiedOfRights() {
-    // see https://github.com/voxmedia/sbn/commit/ce74ab006c89afe799afffa2a31137454d9e5bb3
-    return Cookie.hasCookie('_chorus_ccpa_consent');
+    // see https://voxmedia.slack.com/archives/CPJDM3CCU/p1594741208106400
+    return true;
   }
 
   isLSPACoveredTransaction() {

@@ -28,8 +28,8 @@ describe('CCPA for Chorus Support', () => {
       expect(PrivacyCompliance.canUsePersonalInformationForTargeting()).toBeTruthy();
     });
 
-    it('should default to not notified of rights', () => {
-      expect(PrivacyCompliance.hasBeenNotifiedOfRights()).toBeFalsy();
+    it('should default to not notified of rights on chorus', () => {
+      expect(PrivacyCompliance.hasBeenNotifiedOfRights()).toBeTruthy();
     });
   });
 
@@ -45,11 +45,6 @@ describe('CCPA for Chorus Support', () => {
     it('should restrict personal info targeting, when opt out of sale cookie is set', () => {
       document.cookie = '_chorus_ccpa_consent_donotsell=abcd1234';
       expect(PrivacyCompliance.canUsePersonalInformationForTargeting()).toBeFalsy();
-    });
-
-    it('should restrict personal info targeting, when opt out of sale cookie is set', () => {
-      document.cookie = '_chorus_ccpa_consent=abcd1234';
-      expect(PrivacyCompliance.hasBeenNotifiedOfRights()).toBeTruthy();
     });
   });
 });
