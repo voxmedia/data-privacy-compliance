@@ -1,3 +1,7 @@
+## 1.4.0 (July 14th, 2020)
+
+- Updates Chorus to default to default "yes" to the request of "Has been notified of rights" clause of the CCPA
+
 ## 1.3.1 (July 2nd, 2020)
 
 - Point to Babel-processed code in the `/dist` folder
