@@ -23,8 +23,12 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
   }
 
   useConfig({ window, document }) {
-    this.window = window;
-    this.document = document;
+    if (window) {
+      this.window = window;
+    }
+    if (document) {
+      this.document = document;
+    }
   }
 
   usPrivacyString(callback = () => {}) {
