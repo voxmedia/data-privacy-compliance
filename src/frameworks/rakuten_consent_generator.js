@@ -20,7 +20,7 @@ class RakutenConsentGenerator extends FrameworkBase {
   }
 
   supportedGenerators() {
-    return ['addConsentParameterToRakutenLinks'];
+    return ['addConsentParameterToCommerceLinks'];
   }
 
   useConfig({ document, rakutenLinkSelector }) {
@@ -32,14 +32,18 @@ class RakutenConsentGenerator extends FrameworkBase {
     }
   }
 
-  addConsentParameterToRakutenLinks(callback = () => {}) {
+  addConsentParameterToCommerceLinks(callback = () => {}) {
+    let usp;
+    this.privacyComplianceInstance.Generator.usPrivacyString(val => (usp = val));
+
     const allRakutenLinks = Array.from(this.document.querySelectorAll(this.rakutenLinkSelector));
     const rakutenLinksThatNeedConsentParams = allRakutenLinks.filter(
-      link => !link.href?.includes(RAKUTEN_CONSENT_PARAM + '=' + rakutenLinkSelector)
+      link => !link.href?.includes(RAKUTEN_CONSENT_PARAM + '=')
     );
     rakutenLinksThatNeedConsentParams.forEach(link => {
-      this.log('Adding rakuten consent parameter to a');
-      link.href += `&${RAKUTEN_CONSENT_PARAM}=c${this.privacyComplianceInstance.Generator.usPrivacyString()}`;
+      this.log('Adding rakuten consent parameter to a link', link.href, usp);
+
+      link.href += link.href.includes('?') ? '&' : '?' + `${RAKUTEN_CONSENT_PARAM}=c${usp}`;
     });
 
     callback(rakutenLinksThatNeedConsentParams, this);

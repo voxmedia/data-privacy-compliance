@@ -20,12 +20,10 @@ class MockUSPrivacyStringGenerator extends FrameworkBase {
     return ['usPrivacyString'];
   }
 
-  usPrivacyString() {
-    return this.usp;
+  usPrivacyString(cb) {
+    cb(this.usp);
   }
 }
-
-const TestHelper = require('./test_helpers');
 
 describe('Rakuten Consent Generator', () => {
   beforeEach(() => {
@@ -42,7 +40,26 @@ describe('Rakuten Consent Generator', () => {
     `;
 
     let foundLinks;
-    PrivacyCompliance.Generator.addConsentParameterToRakutenLinks(rakutenLinks => (foundLinks = rakutenLinks));
-    expect(foundLinks.length).toBe(1);
+    PrivacyCompliance.Generator.addConsentParameterToCommerceLinks(rakutenLinks => (foundLinks = rakutenLinks));
+    expect(foundLinks && foundLinks.length).toBe(1);
+
+    // the callback list of links should include the correct string
+    expect(foundLinks.every(a => a.href.includes('1YYY'))).toBe(true);
+
+    // lets check the document is updated too
+    expect(document.querySelector('a').href).toBe('https://click.linksynergy.com/buy/this/now.php?cnst=c1YYY');
+  });
+
+  it('should ignore all the other links', () => {
+    document.body.innerHTML = `
+      <div>
+        <a href="https://click.linksynergy.com/buy/this/now.php">A thing worth buying!</a>
+        <a href="https://someothercompany.iowa.us/beard/oil/buy.php">Does any one need beard oil?</a>
+      </div>
+    `;
+
+    PrivacyCompliance.Generator.addConsentParameterToCommerceLinks();
+    expect(document.querySelector('a').href).toBe('https://click.linksynergy.com/buy/this/now.php?cnst=c1YYY');
+    expect(document.querySelectorAll('a')[1].href.includes('c1YYY')).toBeFalsy();
   });
 });
