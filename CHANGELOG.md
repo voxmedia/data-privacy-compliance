@@ -1,3 +1,7 @@
+## 1.5.0 (August 9th, 2020)
+
+- Adds support for Rakuten affiliate links consent parameter
+
 ## 1.4.0 (July 14th, 2020)
 
 - Updates Chorus to default to default "yes" to the request of "Has been notified of rights" clause of the CCPA

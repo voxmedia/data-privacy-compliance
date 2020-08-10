@@ -2244,8 +2244,14 @@ var UsPrivacyStringAndAPIGenerator = /*#__PURE__*/function (_FrameworkBase) {
     value: function useConfig(_ref) {
       var window = _ref.window,
           document = _ref.document;
-      this.window = window;
-      this.document = document;
+
+      if (window) {
+        this.window = window;
+      }
+
+      if (document) {
+        this.document = document;
+      }
     }
   }, {
     key: "usPrivacyString",
@@ -2377,7 +2383,86 @@ var UsPrivacyStringAndAPIGenerator = /*#__PURE__*/function (_FrameworkBase) {
 }(base);
 
 var us_privacy_string_and_api_generator = UsPrivacyStringAndAPIGenerator;
-var frameworks = [ccpa_on_chorus, ccpa_from_us_privacy_string, us_privacy_string_and_api_generator];
+var RAKUTEN_CONSENT_PARAM = 'cnst';
+
+var RakutenConsentGenerator = /*#__PURE__*/function (_FrameworkBase) {
+  _inherits(RakutenConsentGenerator, _FrameworkBase);
+
+  var _super = _createSuper(RakutenConsentGenerator);
+
+  function RakutenConsentGenerator() {
+    var _this;
+
+    _classCallCheck(this, RakutenConsentGenerator);
+
+    _this = _super.call(this);
+    _this.document = document;
+    _this.rakutenLinkSelector = 'a[href^="https://click.linksynergy.com"]';
+    return _this;
+  }
+
+  _createClass(RakutenConsentGenerator, [{
+    key: "name",
+    value: function name() {
+      return 'RakutenConsentGenerator';
+    }
+  }, {
+    key: "isApplicable",
+    value: function isApplicable() {
+      // This generator depends on being able to generate a usPrivacyString
+      // this is checked when this Generator is being called, so load order isn't important
+      // since all the generators are loaded by the time they are being run
+      return this.privacyComplianceInstance.canGenerate('usPrivacyString');
+    }
+  }, {
+    key: "supportedGenerators",
+    value: function supportedGenerators() {
+      return ['addConsentParameterToCommerceLinks'];
+    }
+  }, {
+    key: "useConfig",
+    value: function useConfig(_ref) {
+      var document = _ref.document,
+          rakutenLinkSelector = _ref.rakutenLinkSelector;
+
+      if (document) {
+        this.document = document;
+      }
+
+      if (rakutenLinkSelector) {
+        this.rakutenLinkSelector = rakutenLinkSelector;
+      }
+    }
+  }, {
+    key: "addConsentParameterToCommerceLinks",
+    value: function addConsentParameterToCommerceLinks() {
+      var _this2 = this;
+
+      var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+      var usp;
+      this.privacyComplianceInstance.Generator.usPrivacyString(function (val) {
+        return usp = val;
+      });
+      var allRakutenLinks = Array.from(this.document.querySelectorAll(this.rakutenLinkSelector));
+      var rakutenLinksThatNeedConsentParams = allRakutenLinks.filter(function (link) {
+        var _link$href;
+
+        return !((_link$href = link.href) === null || _link$href === void 0 ? void 0 : _link$href.includes(RAKUTEN_CONSENT_PARAM + '='));
+      });
+      rakutenLinksThatNeedConsentParams.forEach(function (link) {
+        _this2.log('Adding rakuten consent parameter to a link', link.href, usp);
+
+        link.href += link.href.includes('?') ? '&' : '?' + "".concat(RAKUTEN_CONSENT_PARAM, "=c").concat(usp);
+      });
+      callback(rakutenLinksThatNeedConsentParams, this);
+    }
+  }]);
+
+  return RakutenConsentGenerator;
+}(base);
+
+var rakuten_consent_generator = RakutenConsentGenerator;
+var frameworks = [ccpa_on_chorus, ccpa_from_us_privacy_string, us_privacy_string_and_api_generator, rakuten_consent_generator];
 /*
  * Copyright 2016 Google Inc. All rights reserved.
  *
@@ -2779,6 +2864,7 @@ var PrivacyCompliance = /*#__PURE__*/function () {
     key: "reset",
     // For use with testing only
     value: function reset() {
+      this.log("Reset called. Removing ".concat(this.frameworks.length, " framework(s)"));
       this.frameworks = [];
       this.supportedCapabilities = new Set();
       this.supportedGenerators = new Set();
