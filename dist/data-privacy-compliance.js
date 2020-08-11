@@ -2412,7 +2412,7 @@ var RakutenConsentGenerator = /*#__PURE__*/function (_FrameworkBase) {
       // This generator depends on being able to generate a usPrivacyString
       // this is checked when this Generator is being called, so load order isn't important
       // since all the generators are loaded by the time they are being run
-      return this.privacyComplianceInstance.canGenerate('usPrivacyString');
+      return this.document && this.privacyComplianceInstance.canGenerate('usPrivacyString');
     }
   }, {
     key: "supportedGenerators",
