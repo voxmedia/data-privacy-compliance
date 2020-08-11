@@ -1,6 +1,6 @@
 {
   "name": "data-privacy-compliance",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Vox Media's library for implementing data privacy frameworks",
   "main": "dist/data-privacy-compliance.js",
   "license": "Apache-2.0",

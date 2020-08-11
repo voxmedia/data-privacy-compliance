@@ -102,6 +102,7 @@ class PrivacyCompliance {
 
   // For use with testing only
   reset() {
+    this.log(`Reset called. Removing ${this.frameworks.length} framework(s)`);
     this.frameworks = [];
     this.supportedCapabilities = new Set();
     this.supportedGenerators = new Set();
