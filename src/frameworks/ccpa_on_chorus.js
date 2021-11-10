@@ -22,7 +22,11 @@ class CcpaOnChorus extends FrameworkBase {
     if (!Cookie.hasCookie('chorus_preferences')) return false;
     try {
       const chorusPreferences = JSON.parse(decodeURIComponent(Cookie.getCookie('chorus_preferences')));
-      return chorusPreferences.privacy.doNotSell;
+      if (typeof chorusPreferences.privacy === 'object') {
+        return chorusPreferences.privacy.doNotSell;
+      } else {
+        return false;
+      }
     } catch (e) {
       console.error(`There was an error obtaining Chorus Preferences do not sell cookie: ${e}`);
       return false;
