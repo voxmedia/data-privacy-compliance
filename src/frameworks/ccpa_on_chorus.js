@@ -25,11 +25,11 @@ class CcpaOnChorus extends FrameworkBase {
       if (typeof chorusPreferences.privacy === 'object') {
         return chorusPreferences.privacy.doNotSell;
       } else {
-        return false;
+        return true;
       }
     } catch (e) {
       console.error(`There was an error obtaining Chorus Preferences do not sell cookie: ${e}`);
-      return false;
+      return true;
     }
   }
 
