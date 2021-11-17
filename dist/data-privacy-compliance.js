@@ -2104,7 +2104,20 @@ var CcpaOnChorus = /*#__PURE__*/function (_FrameworkBase) {
   }, {
     key: "canUsePersonalInformationForTargeting",
     value: function canUsePersonalInformationForTargeting() {
-      return !cookie.hasCookie('_chorus_ccpa_consent_donotsell');
+      return !cookie.hasCookie('_chorus_ccpa_consent_donotsell') && !this.chorusDoNotSellPreference();
+    }
+  }, {
+    key: "chorusDoNotSellPreference",
+    value: function chorusDoNotSellPreference() {
+      if (!cookie.hasCookie('chorus_preferences')) return false;
+
+      try {
+        var chorusPreferences = JSON.parse(decodeURIComponent(cookie.getCookie('chorus_preferences')));
+        return Boolean(chorusPreferences.privacy && chorusPreferences.privacy.doNotSell);
+      } catch (e) {
+        console.error("There was an error obtaining Chorus Preferences do not sell cookie: ".concat(e));
+        return false;
+      }
     }
   }, {
     key: "hasBeenNotifiedOfRights",
