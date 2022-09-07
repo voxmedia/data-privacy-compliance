@@ -1,7 +1,3 @@
-## 1.5.0 (November 10, 2021)
-
-- Updates canUsePersonalInformationForTargeting check to look for new Chorus Preferences do not sell cookie
-
 ## 1.4.0 (July 14th, 2020)
 
 - Updates Chorus to default to default "yes" to the request of "Has been notified of rights" clause of the CCPA

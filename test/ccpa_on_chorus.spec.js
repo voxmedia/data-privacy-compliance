@@ -33,18 +33,13 @@ describe('CCPA for Chorus Support', () => {
     });
   });
 
-  describe('it should respect Chorus cookies', () => {
+  describe('it should repsect Chorus cookies', () => {
     beforeEach(() => {
       window.Chorus = { fakeData: 'fine' };
     });
 
     afterEach(() => {
-      document.cookie = '';
-    });
-
-    it('should restrict personal info targeting, when the chorus preferences do not sell cookie is set', () => {
-      document.cookie = 'chorus_preferences={"v":1,"privacy":{"cookies":"essential","doNotSell":true}}';
-      expect(PrivacyCompliance.canUsePersonalInformationForTargeting()).toBeFalsy();
+      window.cookie = '';
     });
 
     it('should restrict personal info targeting, when opt out of sale cookie is set', () => {
