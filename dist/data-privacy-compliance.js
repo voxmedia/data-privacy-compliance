@@ -2291,6 +2291,10 @@ var UsPrivacyStringAndAPIGenerator = /*#__PURE__*/function (_FrameworkBase) {
           usPrivacyDataString = this.buildUsPrivacyString();
           break;
 
+        case 'registerDeletion':
+          // TODO: Determine what needs to happen here.
+          break;
+
         default:
           canSuccessfullyAnswer = false;
           console.error("__uspapi: Unable to handle command '".concat(command, "'"));
