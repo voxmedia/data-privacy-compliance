@@ -80,12 +80,10 @@ describe('USPrivacyAPI', () => {
     addFakeCCPAFramework();
 
     let success;
-    let consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     window.__uspapi('getUSPData', 2, (_, wasSuccess) => {
       success = wasSuccess;
     });
-    expect(consoleError).toHaveBeenCalled();
     expect(success).toBe(false);
   });
 

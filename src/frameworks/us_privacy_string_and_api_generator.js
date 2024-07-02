@@ -55,7 +55,7 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
     let usPrivacyDataString = `${US_PRIVACY_API_VERSION}---`;
 
     if (version !== US_PRIVACY_API_VERSION) {
-      console.error(`__uspapi: Only able to handle version 1`);
+      this.log(`__uspapi error: Only able to handle version 1`);
       canSuccessfullyAnswer = false;
     }
 
@@ -68,7 +68,7 @@ class UsPrivacyStringAndAPIGenerator extends FrameworkBase {
           break;
       default:
         canSuccessfullyAnswer = false;
-        console.error(`__uspapi: Unable to handle command '${command}'`);
+        this.log(`__uspapi error: Unable to handle command '${command}'`);
     }
 
     this.log(

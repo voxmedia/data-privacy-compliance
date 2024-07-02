@@ -2282,7 +2282,7 @@ var UsPrivacyStringAndAPIGenerator = /*#__PURE__*/function (_FrameworkBase) {
       var usPrivacyDataString = "".concat(US_PRIVACY_API_VERSION, "---");
 
       if (version !== US_PRIVACY_API_VERSION) {
-        console.error("__uspapi: Only able to handle version 1");
+        this.log("__uspapi error: Only able to handle version 1");
         canSuccessfullyAnswer = false;
       }
 
@@ -2297,7 +2297,7 @@ var UsPrivacyStringAndAPIGenerator = /*#__PURE__*/function (_FrameworkBase) {
 
         default:
           canSuccessfullyAnswer = false;
-          console.error("__uspapi: Unable to handle command '".concat(command, "'"));
+          this.log("__uspapi error: Unable to handle command '".concat(command, "'"));
       }
 
       this.log("".concat(canSuccessfullyAnswer ? 'Successfully' : 'Unsuccessfully', " handled CCPA privacy request ").concat(usPrivacyDataString));
